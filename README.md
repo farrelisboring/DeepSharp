@@ -32,7 +32,7 @@ flowchart LR
 ## Quickstart
 
 ```csharp
-using NetTorch;
+using DeepSharp;
 
 var a = new NativeMatrixFloat(2, 2);
 var b = new NativeMatrixFloat(2, 2);
