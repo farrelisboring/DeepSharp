@@ -16,7 +16,7 @@ __global__ void kernel_sigmoid_float(const float* __restrict__ logits, const siz
     }
 }
 
-__global__ void kernel_tanh_float(float* __restrict__ data, int n, float* data_dest) {
+__global__ void kernel_tanh_float(const float* __restrict__ data, size_t n, float* data_dest) {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     int stride = blockDim.x * gridDim.x;
 
@@ -26,7 +26,7 @@ __global__ void kernel_tanh_float(float* __restrict__ data, int n, float* data_d
     }
 }
 
-__global__ void kernel_leaky_relu_float(float* __restrict__ data,
+__global__ void kernel_leaky_relu_float(const float* __restrict__ data,
     size_t n, const float alpha, float* data_dest) {
 
     const size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -40,7 +40,7 @@ __global__ void kernel_leaky_relu_float(float* __restrict__ data,
     }
 }
 
-__global__ void kernel_d_leaky_relu_float(float* __restrict__ data,
+__global__ void kernel_d_leaky_relu_float(const float* __restrict__ data,
     size_t n,
     const float alpha, float* data_dest) {
 
@@ -58,7 +58,7 @@ __global__ void kernel_d_leaky_relu_float(float* __restrict__ data,
 
 
 extern "C" {
-    matrix_float* sigmoid_float(const matrix_float* a_struc) {
+    matrix_float* sigmoid_float(const matrix_float* __restrict__ a_struc) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -84,7 +84,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* tanh_float(const matrix_float* a_struc) {
+    matrix_float* tanh_float(const matrix_float* __restrict__ a_struc) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -110,7 +110,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* d_leaky_relu_float(const matrix_float* a_struc, const float alpha) {
+    matrix_float* d_leaky_relu_float(const matrix_float* __restrict__ a_struc, const float alpha) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -134,7 +134,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* leaky_relu_float(const matrix_float* a_struc, float alpha) {
+    matrix_float* leaky_relu_float(const matrix_float* __restrict__ a_struc, const float alpha) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 

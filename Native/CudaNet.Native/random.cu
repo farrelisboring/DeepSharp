@@ -145,7 +145,7 @@ extern "C" {
         fill_with_curand_host_float(m->data, n, seed, /*subseq=*/0ULL);
     }
 
-    void fill_kaiming_normal_float(matrix_float* m, int fan_in, unsigned long long seed, unsigned long long subseq)
+    void fill_kaiming_normal_float(matrix_float* m, size_t fan_in, unsigned long long seed, unsigned long long subseq)
     {
 
         const size_t n = safe_count(m->rows, m->cols);

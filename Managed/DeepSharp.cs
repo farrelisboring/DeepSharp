@@ -1,4 +1,4 @@
-﻿namespace NetTorch;
+﻿namespace DeepSharp;
 
 using System;
 using System.Runtime.InteropServices;
@@ -14,14 +14,14 @@ internal enum CudaResult
 
 internal static class NativeMethods
 {
-    private const string LibraryName = "MatrixNative";
+    private const string LibraryName = "DeepSharp.Native";
 
     // Double precision API
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern MatrixDoubleHandle matrix_double_create(int rows, int cols);
+    internal static extern MatrixDoubleHandle matrix_double_create(nuint rows, nuint cols);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern void matrix_free(IntPtr m);
+    internal static extern void matrix_free_double(IntPtr m);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void fill_double_rng(MatrixDoubleHandle m, ulong seed);
@@ -30,19 +30,19 @@ internal static class NativeMethods
     internal static extern void fill_double_all_double(MatrixDoubleHandle m, double value);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern double matrix_getdouble(MatrixDoubleHandle m, int row, int col);
+    internal static extern double matrix_getdouble(MatrixDoubleHandle m, nuint row, nuint col);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern MatrixDoubleHandle matrix_multiply_double(
         MatrixDoubleHandle a,
         MatrixDoubleHandle b,
-        int aRow,
-        int sharedDim,
-        int bCol);
+        nuint aRow,
+        nuint sharedDim,
+        nuint bCol);
 
     // Single precision API
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern MatrixFloatHandle matrix_float_create(int rows, int cols);
+    internal static extern MatrixFloatHandle matrix_float_create(nuint rows, nuint cols);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void matrix_free_float(IntPtr m);
@@ -51,15 +51,15 @@ internal static class NativeMethods
     internal static extern MatrixFloatHandle matrix_multiply_float(
         MatrixFloatHandle a,
         MatrixFloatHandle b,
-        int aRow,
-        int sharedDim,
-        int bCol);
+        nuint aRow,
+        nuint sharedDim,
+        nuint bCol);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void fill_float_rng(MatrixFloatHandle m, ulong seed);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern float matrix_getfloat(MatrixFloatHandle m, int row, int col);
+    internal static extern float matrix_getfloat(MatrixFloatHandle m, nuint row, nuint col);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern MatrixFloatHandle tanh_float(MatrixFloatHandle m);
@@ -68,7 +68,7 @@ internal static class NativeMethods
     internal static extern MatrixFloatHandle leaky_relu_float(MatrixFloatHandle m, float alpha);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern MatrixFloatHandle d_leaky_relu_float(MatrixFloatHandle m, float alpha);
+    internal static extern MatrixFloatHandle d_leaky_relu_float(MatrixFloatHandle m,  float alpha);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern MatrixFloatHandle elementwise_multiplication_float(
@@ -82,7 +82,7 @@ internal static class NativeMethods
     internal static extern MatrixFloatHandle sigmoid_float(MatrixFloatHandle m);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern MatrixFloatHandle scalar_division_float(MatrixFloatHandle a, float y);
+    internal static extern MatrixFloatHandle scalar_division_float(MatrixFloatHandle a,  float y);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern MatrixFloatHandle scalar_multiplication_float(MatrixFloatHandle a, float y);
@@ -108,7 +108,7 @@ internal static class NativeMethods
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void fill_kaiming_normal_float(
         MatrixFloatHandle m,
-        int fanIn,
+        nuint fanIn,
         ulong seed,
         ulong subseq);
 
@@ -129,7 +129,7 @@ internal static class NativeMethods
 
     // HALF
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern MatrixHalfHandle matrix_half_create(int rows, int cols); // TODO: Needs a half class
+    internal static extern MatrixHalfHandle matrix_half_create(nuint rows, nuint cols); // TODO: Needs a half class
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void matrix_free_half(IntPtr m);
@@ -138,16 +138,15 @@ internal static class NativeMethods
     internal static extern MatrixHalfHandle matrix_multiply_half(
         MatrixHalfHandle a,
         MatrixHalfHandle b,
-        int aRow,
-        int sharedDim,
-        int bCol);
+        nuint aRow,
+        nuint sharedDim,
+        nuint bCol);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern void fill_half_rng(MatrixHalfHandle m, ulong seed, ulong subseq);
 
-    // Returns raw 16-bit representation to avoid marshalling issues with System.Half
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern ushort matrix_gethalf(MatrixHalfHandle m, int row, int col);
+    internal static extern ushort matrix_gethalf(MatrixHalfHandle m, nuint row, nuint col);
 
     [DllImport(LibraryName, CallingConvention = CallingConvention.Cdecl)]
     internal static extern CudaResult get_last_status();
@@ -182,10 +181,7 @@ public class CurandException : Exception
     public CurandException(string message) : base(message) { }
 }
 
-/// <summary>
-/// Safe handle for a native matrix_double*.
-/// The underlying memory resides on the GPU and must be released via matrix_free.
-/// </summary>
+
 public sealed class MatrixDoubleHandle : SafeHandle
 {
     private MatrixDoubleHandle() : base(IntPtr.Zero, ownsHandle: true) { }
@@ -193,7 +189,7 @@ public sealed class MatrixDoubleHandle : SafeHandle
 
     protected override bool ReleaseHandle()
     {
-        NativeMethods.matrix_free(handle);
+        NativeMethods.matrix_free_double(handle);
         return true;
     }
 }
@@ -230,10 +226,10 @@ public sealed class MatrixHalfHandle : SafeHandle
 public sealed class NativeMatrixDouble : IDisposable
 {
     public MatrixDoubleHandle Handle { get; }
-    public int Rows { get; }
-    public int Cols { get; }
+    public nuint Rows { get; }
+    public nuint Cols { get; }
 
-    public NativeMatrixDouble(int rows, int cols)
+    public NativeMatrixDouble(nuint rows, nuint cols)
     {
         MatrixDoubleHandle testHandle = NativeMethods.matrix_double_create(rows, cols);
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.matrix_double_create));
@@ -247,7 +243,7 @@ public sealed class NativeMatrixDouble : IDisposable
         Cols = cols;
     }
 
-    private NativeMatrixDouble(MatrixDoubleHandle handle, int rows, int cols)
+    private NativeMatrixDouble(MatrixDoubleHandle handle, nuint rows, nuint cols)
     {
         Handle = handle;
         Rows = rows;
@@ -266,7 +262,7 @@ public sealed class NativeMatrixDouble : IDisposable
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.fill_double_all_double));
     }
 
-    public double this[int r, int c] {
+    public double this[nuint r, nuint c] {
         get {
             if (r < 0 || r >= Rows || c < 0 || c >= Cols) throw new IndexOutOfRangeException($"Invalid indices r={r}, c={c}. Valid range is 0 <= r < {Rows}, 0 <= c < {Cols}");
 
@@ -296,10 +292,10 @@ public sealed class NativeMatrixDouble : IDisposable
 public sealed class NativeMatrixFloat : IDisposable
 {
     public MatrixFloatHandle Handle { get; }
-    public int Rows { get; }
-    public int Cols { get; }
+    public nuint Rows { get; }
+    public nuint Cols { get; }
 
-    public NativeMatrixFloat(int rows, int cols)
+    public NativeMatrixFloat(nuint rows, nuint cols)
     {
         //TODO: make sure the dimensions are not negative
         MatrixFloatHandle testHandle = NativeMethods.matrix_float_create(rows, cols);
@@ -314,14 +310,14 @@ public sealed class NativeMatrixFloat : IDisposable
         Cols = cols;
     }
 
-    private NativeMatrixFloat(MatrixFloatHandle handle, int rows, int cols)
+    private NativeMatrixFloat(MatrixFloatHandle handle, nuint rows, nuint cols)
     {
         //TODO: make sure the dimensions are not negative
         Handle = handle;
         Rows = rows;
         Cols = cols;
     }
-    public float this[int r, int c]
+    public float this[nuint r, nuint c]
     {
         get
         {
@@ -337,11 +333,11 @@ public sealed class NativeMatrixFloat : IDisposable
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.fill_float_rng));
     }
 
-    public int GetRows() {
+    public nuint GetRows() {
         return Rows;
     }
 
-    public int GetCols() {
+    public nuint GetCols() {
         return Cols;
     }
 
@@ -355,15 +351,7 @@ public sealed class NativeMatrixFloat : IDisposable
     }
 
 
-    /// <summary>
-    /// Fill the matrix with values drawn from a Kaiming normal distribution.
-    /// The memory resides on the GPU and is populated in-place.
-    /// </summary>
-    /// <param name="fanIn">Number of input units in the weight tensor.</param>
-    /// <param name="stddev">Base standard deviation before fan-in adjustment.</param>
-    /// <param name="seed">Random seed passed to cuRAND.</param>
-    /// <param name="subseq">Optional subsequence for deterministic streams.</param>
-    public void FillKaimingNormal(int fanIn, ulong seed, ulong subseq = 0)
+    public void FillKaimingNormal(nuint fanIn, ulong seed, ulong subseq = 0)
     {
         NativeMethods.fill_kaiming_normal_float(Handle, fanIn, seed, subseq);
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.fill_kaiming_normal_float));
@@ -531,10 +519,10 @@ public sealed class NativeMatrixFloat : IDisposable
 public sealed class NativeMatrixHalf : IDisposable
 {
     public MatrixHalfHandle Handle { get; }
-    public int Rows { get; }
-    public int Cols { get; }
+    public nuint Rows { get; }
+    public nuint Cols { get; }
 
-    public NativeMatrixHalf(int rows, int cols)
+    public NativeMatrixHalf(nuint rows, nuint cols)
     {
         MatrixHalfHandle testHandle = NativeMethods.matrix_half_create(rows, cols);
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.matrix_half_create));
@@ -548,7 +536,7 @@ public sealed class NativeMatrixHalf : IDisposable
         Cols = cols;
     }
 
-    private NativeMatrixHalf(MatrixHalfHandle handle, int rows, int cols)
+    private NativeMatrixHalf(MatrixHalfHandle handle, nuint rows, nuint cols)
     {
         Handle = handle;
         Rows = rows;
@@ -562,7 +550,7 @@ public sealed class NativeMatrixHalf : IDisposable
         NativeMethods.ThrowIfFailed(nameof(NativeMethods.fill_half_rng));
     }
 
-    public Half this[int r, int c]
+    public Half this[nuint r, nuint c]
     {
         get
         {

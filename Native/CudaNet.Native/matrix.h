@@ -7,23 +7,21 @@
 extern "C" {
 
 
-
-    // simple POD to hold metadata + pointer
     struct matrix_double {
-        int rows;
-        int cols;
+        size_t rows;
+        size_t cols;
         double* data;
     };
 
     struct matrix_float {
-        int rows;
-        int cols;
+        size_t rows;
+        size_t cols;
         float* data;
     };
 
     struct matrix_half {
-        int rows;
-        int cols;
+        size_t rows;
+        size_t cols;
         half* data;
     };
 

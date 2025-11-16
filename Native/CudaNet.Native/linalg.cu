@@ -29,7 +29,7 @@ __global__ void kernel_matrix_subtract_float(const float* __restrict__ data, con
 
 
 extern "C" {
-    matrix_double* matrix_multiply_double(const matrix_double* a_stru, const matrix_double* b_stru, int a_row, int shared_dimension, int b_col) {
+    matrix_double* matrix_multiply_double(const matrix_double* __restrict__ a_stru, const matrix_double* __restrict__ b_stru, size_t a_row, size_t shared_dimension, size_t b_col) {
         g_last_status = CudaResult_Success;
 
         if (!a_stru || !b_stru || !a_stru->data || !b_stru->data) {
@@ -85,7 +85,7 @@ extern "C" {
         return c_stru;
     }
 
-    matrix_float* matrix_multiply_float(const matrix_float* a_stru, const matrix_float* b_stru, int a_row, int shared_dimension, int b_col) {
+    matrix_float* matrix_multiply_float(const matrix_float* a_stru, const matrix_float* b_stru, size_t a_row, size_t shared_dimension, size_t b_col) {
         g_last_status = CudaResult_Success;
 
         if (!a_stru || !b_stru || !a_stru->data || !b_stru->data) {
@@ -193,7 +193,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* transpose_float(const matrix_float* a_struc) { 
+    matrix_float* transpose_float(const matrix_float* __restrict__ a_struc) {
         g_last_status = CudaResult_Success;
 
         matrix_float* c_struc = matrix_float_create(a_struc->cols, a_struc->rows);
@@ -227,7 +227,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_half* matrix_multiply_half(const matrix_half* a_stru, const matrix_half* b_stru,
+    matrix_half* matrix_multiply_half(const matrix_half* __restrict__ a_stru, const matrix_half* __restrict__ b_stru,
         size_t a_row, size_t shared_dimension, size_t b_col) {
         g_last_status = CudaResult_Success;
 

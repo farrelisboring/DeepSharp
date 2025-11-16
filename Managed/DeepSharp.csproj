@@ -5,8 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
-    <Version>1.2.9</Version>
+    <Version>1.3.2</Version>
     <Authors>Soundgarden</Authors>
+
+    <AssemblyName>DeepSharp</AssemblyName>
   </PropertyGroup>
 
 </Project>

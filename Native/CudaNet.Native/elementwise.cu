@@ -139,7 +139,7 @@ __global__ void kernel_elementwise_multiply_float (
 
 
 extern "C" {
-    matrix_float* scalar_division_float(const matrix_float* a_struc, const float y) {
+    matrix_float* scalar_division_float(const matrix_float* __restrict__ a_struc, const float y) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -165,7 +165,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* scalar_multiplication_float(const matrix_float* a_struc, const float y) { // header
+    matrix_float* scalar_multiplication_float(const matrix_float* __restrict__ a_struc, const float y) { // header
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -192,7 +192,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* scalar_add_float(const matrix_float* a_struc, const float y) {
+    matrix_float* scalar_add_float(const matrix_float* __restrict__ a_struc, const float y) {
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -218,7 +218,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* scalar_subtract_float(const matrix_float* a_struc, const float y) { // header
+    matrix_float* scalar_subtract_float(const matrix_float* __restrict__ a_struc, const float y) { // header
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
@@ -319,7 +319,7 @@ extern "C" {
         return c_struc;
     }
 
-    matrix_float* elementwise_multiplication_float(const matrix_float* a_struc, const matrix_float* b_struc) { // header
+    matrix_float* elementwise_multiplication_float(const matrix_float* __restrict__ a_struc, const matrix_float* __restrict__ b_struc) { // header
         g_last_status = CudaResult_Success;
         cudaStream_t stream = 0;
 
