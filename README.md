@@ -1,6 +1,6 @@
 # DeepSharp
 
-RealCyda is a machine learning interop library bridging CUDA/C++ performance with C# simplicity.
+DeepSharp is a machine learning interop library bridging CUDA/C++ performance with C# simplicity.
 
 ```mermaid
 flowchart LR
